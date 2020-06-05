@@ -24,7 +24,7 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
-//seedDB(); // Seed the databse
+// /* --->>> WARNING <<<--- */seedDB(); // Seed the databse i.e. remove everything from the database 
 
 // PASSPORT CONFIGURATION
 app.use(require("express-session")({
@@ -50,5 +50,5 @@ app.use("/shops", shopRoutes);
 app.use("/shops/:id/comments", commentRoutes);
 
 app.listen(process.env.PORT||3000, process.env.IP, function(){
-   console.log("The YelpCamp Server Has Started!");
+   console.log("MedsNearMe server is running!");
 });

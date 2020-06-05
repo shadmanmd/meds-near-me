@@ -16,14 +16,17 @@ router.get("/register", function(req, res){
 //handle sign up logic
 router.post("/register", function(req, res){
     var newUser = new User({username: req.body.username});
+	if (req.body.adminCode === process.env.ADMINCODE){
+		newUser.isAdmin = true;
+	}
     User.register(newUser, req.body.password, function(err, user){
         if(err){
             req.flash("error", err.message);
             res.redirect("/register");
         }
         passport.authenticate("local")(req, res, function(){
-		   req.flash("success", "Welcome to MedsNearMe " + user.username);
-           res.redirect("/shops"); 
+			req.flash("success", "MedsNearMe welcomes you, " + user.username + '!');
+           	res.redirect("/shops"); 
         });
     });
 });

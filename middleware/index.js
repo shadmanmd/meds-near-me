@@ -7,14 +7,14 @@ var middlewareObj = {};
 
 middlewareObj.checkShopOwnership = function(req, res, next) {
 	if(req.isAuthenticated()){
-		Shop.findById(req.params.id, function(err, foundShop){
+		Shops.findById(req.params.id, function(err, foundShop){
 			if(err){
 				req.flash("error", "Campground not found");
 				res.redirect("back");
 			}
 			else{
 				// does user own the campground
-				if(foundShop.author.id.equals(req.user._id)){
+				if(foundShop.author.id.equals(req.user._id) || req.user.isAdmin){
 					next();
 				}
 				else{
@@ -38,7 +38,7 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
 			}
 			else{
 				// does user own the comment
-				if(foundComment.author.id.equals(req.user._id)){
+				if(foundComment.author.id.equals(req.user._id) || req.user.isAdmin){
 					next();
 				}
 				else{
