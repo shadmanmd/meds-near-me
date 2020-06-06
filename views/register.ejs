@@ -2,26 +2,36 @@
 
 <div class="container">
 	<div class="row">
-		<h1 style="text-align:center">Sign Up</h1>
-		<div style="width:30%; margin:20px auto;">
+		<legend>
+			<h1>
+				Register Yourself
+			</h1>
+		</legend>
+		<div class="col-md-12">
 			<form action="/register" method="POST">
 				<div class="form-group">
-					<input class="form-control" type="text" name="username" placeholder="username" required>
+					<label for="email">Your Email ID</label>
+					<input class="form-control" type="email" name="email" placeholder="email ID" required autofocus>
 				</div>
 				<div class="form-group">
-					<input class="form-control" type="password" name="password" placeholder="password" required>
+					<label for="email">Your Username</label>
+					<input class="form-control" type="text" name="username" placeholder="username" required autofocus>
 				</div>
 				<div class="form-group">
-					<input class="form-control" type="text" name="adminCode" placeholder="secret code">
+					<label for="email">Set a Password</label>
+					<input class="form-control" type="password" name="password" placeholder="password" required autofocus>
 				</div>
 				<div class="form-group">
-					<a href="#" onclick="secret()">What's Secret Code?</a>	
+					<label for="email">Want to become an admin?</label>
+					<input class="form-control" type="text" name="adminCode" placeholder="admin code" autofocus>
 				</div>
 				<div class="form-group">
+					<a href="#" onclick="secret()"><em>What's the Admin Code?</em></a>	
+				</div>
+				<div class="form-group" style="width:25%; margin:20px auto;">
 					<button class="btn btn-lg btn-default btn-block btn-primary">Sign Up</button>
 				</div>
 			</form>
-			<a href="/shops">Home</a>	
 		</div>
 	</div>
 </div>
