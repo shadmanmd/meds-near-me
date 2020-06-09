@@ -17,7 +17,11 @@ var shopsSchema = new mongoose.Schema({
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Comment"
 		}
-	]
+	],
+	createdAt: {
+		type: Date,
+		default: Date.now
+	}
 });
 
 module.exports = mongoose.model("Shops", shopsSchema);

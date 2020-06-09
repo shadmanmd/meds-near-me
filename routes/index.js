@@ -4,7 +4,8 @@ var express 	= require("express"),
 	nodemailer	= require("nodemailer"),
 	crypto		= require("crypto"),
 	async		= require("async"),
-	User 		= require("../models/user");
+	User 		= require("../models/user"),
+	Shops		= require("../models/shops");
 
 //root route
 router.get("/", function(req, res){
@@ -18,9 +19,15 @@ router.get("/register", function(req, res){
 
 //handle sign up logic
 router.post("/register", function(req, res){
-    var newUser = new User({email: req.body.email, username: req.body.username});
+    var newUser = new User({
+		email: req.body.email, 
+		username: req.body.username, 
+	});
 	if (req.body.adminCode === process.env.ADMINCODE){
 		newUser.isAdmin = true;
+	}
+	if (req.body.dp){
+		newUser.dp = req.body.dp;
 	}
     User.register(newUser, req.body.password, function(err, user){
         if(err){
@@ -172,5 +179,21 @@ router.post('/reset/:token', function(req, res) {
   });
 });
 
+// USER PROFILE
+router.get("/profile/:id", function(req, res){
+	User.findById(req.params.id).exec(function(err, foundUser){
+		if(err){
+			req.flash("error", err);
+		}
+		else{
+			Shops.find().where('author.id').equals(foundUser._id).exec(function(err, foundShops){
+				if(err){
+					req.flash("error", err);
+				}
+				res.render("profile", {user: foundUser, shops: foundShops});
+			});
+		}
+	});
+});
 
 module.exports = router;

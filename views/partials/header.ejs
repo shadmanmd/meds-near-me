@@ -3,8 +3,9 @@
 	<head>
 		<title>MedsNearMe</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<!-- <link rel="shortcut icon" href="logo.jpg"> -->
+		<!-- BootStrap CDN -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<!-- CSS -->
 		<link rel="stylesheet" href="/stylesheets/main.css">
 	</head>
 	<script>
@@ -12,6 +13,8 @@
 			window.alert("Secret Code is meant to make a user an admin. To know the secret code, contact developer.");
 		}
 	</script>
+	<!-- FontAwesome CDN -->
+	<script src="https://kit.fontawesome.com/d3ba8b71b7.js" crossorigin="anonymous"></script> 
 	<body>
 		<!-- navbar-expand-md -->
 		<nav class="navbar navbar-default">
@@ -26,7 +29,7 @@
 							<li><a href="/login">Login</a></li>
 							<li><a href="/register">Sign Up</a></li>
 						<% } else { %>
-							<li><a href="#">Welcome <%= currentUser.username %>!</a></li>
+							<li><a href="/profile/<%= currentUser._id %>">Welcome <%= currentUser.username %>!</a></li>
 							<li><a href="/logout">Logout</a></li>
 						<% } %>
 					</ul>

@@ -5,6 +5,7 @@ var UserSchema = new mongoose.Schema({
 	email: {type: String, unique: true},
 	username: String,
 	password: String,
+	dp: {type: String, default:"https://octodex.github.com/images/yaktocat.png"},
 	isAdmin: {type: Boolean, default: false},
 	resetPasswordToken: String,
 	resetPasswordExpires: Date

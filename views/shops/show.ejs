@@ -24,7 +24,7 @@
 						<%= shop.address %>
 					</p>
 					<p>
-						<em>Submitted by: <%= shop.author.username %></em>
+						<em>Submitted by: <a href="/profile/<%= shop.author.id %>"><%= shop.author.username %></a>, <%= moment(shop.createdAt).fromNow() %></em>
 					</p>
 					<% if(currentUser && shop.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
 						<a class="btn btn-xs btn-warning" href="/shops/<%= shop._id %>/edit">Edit</a>
@@ -36,6 +36,7 @@
 					<% } %>
 				</div>
 			</div>
+			<!-- OLD -->
 			<div class="well">
 				<div class="text-right">
 					<a class="btn btn-success" href="/shops/<%= shop._id %>/comments/new">Add New Comment</a>
@@ -45,7 +46,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<strong><%= comment.author.username %></strong>
-							<span class="pull-right"><em>A few days ago</em></span>
+							<span class="pull-right"><em><%= moment(comment.createdAt).fromNow() %></em></span>
 							<p>
 								<%= comment.text %>
 							</p>
