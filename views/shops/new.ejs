@@ -6,22 +6,22 @@
 			<h1>Add a new Medical Shop</h1>
 		</legend>
 		<div class="col-md-12">
-			<form action="/shops" method="POST">
+			<form action="/shops" method="POST" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="name">Shop's Name</label>
-					<input class="form-control" type="text" name="name" placeholder="Enter the name" required>
+					<input class="form-control" type="text" name="shop[name]" placeholder="Enter the name" required>
 				</div>
 				<div class="form-group">
 					<label for="image">Shop's Image</label>
-					<input class="form-control" type="text" name="image" placeholder="image url" required>
+					<input class="form-control" type="file" name="shop[image]" accept="image/*" required>
 				</div>
 				<div class="form-group">
 					<label for="contact">Shop's Contact No.</label>
-					<input class="form-control" type="number" name="contact" placeholder="contact no." required>
+					<input class="form-control" type="number" name="shop[contact]" placeholder="contact no." required>
 				</div>
 				<div class="form-group">
 					<label for="address">Shop's Address</label>
-					<input class="form-control" type="text" name="address" placeholder="address" required>
+					<input class="form-control" type="text" name="shop[address]" placeholder="address" required>
 				</div>
 				<div class="form-group" style="width:20%; margin:20px auto;">
 					<button class="btn btn-lg btn-default btn-block btn-primary">Submit</button>

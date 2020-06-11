@@ -3,6 +3,28 @@ var router  = express.Router();
 var Shop = require("../models/shops");
 var middleware = require("../middleware");
 
+var multer = require('multer');
+var storage = multer.diskStorage({
+  filename: function(req, file, callback) {
+    callback(null, Date.now() + file.originalname);
+  }
+});
+var imageFilter = function (req, file, cb) {
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
+var upload = multer({ storage: storage, fileFilter: imageFilter})
+
+var cloudinary = require('cloudinary');
+cloudinary.config({ 
+  cloud_name: 'shadmanmd', 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 //INDEX - show all shops
 router.get("/", function(req, res){
     // Get all shops from DB
@@ -16,31 +38,28 @@ router.get("/", function(req, res){
 });
 
 //CREATE - add new shop to DB
-router.post("/", middleware.isLoggedIn, function(req, res){
-    // get data from form and add to shops array
-    var name = req.body.name;
-    var image = req.body.image;
-	var contact = req.body.contact;
-    var address = req.body.address;
-	var author = {
-		id: req.user._id,
-		username: req.user.username
-	};
-    var newShop = {
-		name: name, 
-		image: image, 
-		contact: contact,
-		address: address,
-		author: author
-	};
-    // Create a new shop and save to DB
-    Shop.create(newShop, function(err, newlyCreated){
-        if(err){
-            console.log(err);
-        } else {
-            //redirect back to shops page
-            res.redirect("/shops");
+router.post("/", middleware.isLoggedIn, upload.single('shop[image]'), function(req, res) {
+    cloudinary.v2.uploader.upload(req.file.path, function(err, result) {
+      if(err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+      }
+      // add cloudinary url for the image to the shop object under image property
+      req.body.shop.image = result.secure_url;
+      // add image's public_id to shop object
+      req.body.shop.imageId = result.public_id;
+      // add author to shop
+      req.body.shop.author = {
+        id: req.user._id,
+        username: req.user.username
+      }
+      Shop.create(req.body.shop, function(err, shop) {
+        if (err) {
+          req.flash('error', err.message);
+          return res.redirect('back');
         }
+        res.redirect('/shops/' + shop.id);
+      });
     });
 });
 
@@ -70,29 +89,63 @@ router.get("/:id/edit", middleware.checkShopOwnership, function(req, res){
 });
 
 // UPDATE - Shop
-router.put("/:id", middleware.checkShopOwnership, function(req, res){
-	// find & update the correct shop
-	Shop.findByIdAndUpdate(req.params.id, req.body.shop, function(err, updatedShop){
-		if(err){
-			res.redirect("/shops");
-		}
-		else{
-			// redirect to the show page
-			res.redirect("/shops/" + req.params.id);
-		}
-	});
+router.put("/:id", upload.single('shop[image]'), function(req, res){
+    Shop.findById(req.params.id, async function(err, shop){
+        if(err){
+            req.flash("error", err.message);
+            res.redirect("back");
+        } else {
+            if (req.file) {
+              try {
+                  await cloudinary.v2.uploader.destroy(shop.imageId);
+                  var result = await cloudinary.v2.uploader.upload(req.file.path);
+                  shop.imageId = result.public_id;
+                  shop.image = result.secure_url;
+              } catch(err) {
+                  req.flash("error", err.message);
+                  return res.redirect("back");
+              }
+            }
+            shop.name = req.body.shop.name;
+            shop.address = req.body.shop.address;
+			shop.contact = req.body.shop.contact;
+            shop.save();
+            req.flash("success","Successfully Updated!");
+            res.redirect("/shops/" + shop._id);
+        }
+    });
 });
 
 // DESTROY - Shop
-router.delete("/:id", middleware.checkShopOwnership, function(req, res){
-	Shop.findByIdAndRemove(req.params.id, function(err){
-		if(err){
-			res.redirect("/shops");
-		}
-		else{
-			res.redirect("/shops");
-		}
-	});
+router.delete('/:id', function(req, res) {
+  Shop.findById(req.params.id, async function(err, shop) {
+    if(err) {
+      req.flash("error", err.message);
+      return res.redirect("back");
+    }
+    try {
+        await cloudinary.v2.uploader.destroy(shop.imageId);
+        shop.remove();
+        req.flash('success', 'Shop deleted successfully!');
+        res.redirect('/shops');
+    } catch(err) {
+        if(err) {
+          req.flash("error", err.message);
+          return res.redirect("back");
+        }
+    }
+  });
 });
+
+// router.delete("/:id", middleware.checkShopOwnership, function(req, res){
+// 	Shop.findByIdAndRemove(req.params.id, function(err){
+// 		if(err){
+// 			res.redirect("/shops");
+// 		}
+// 		else{
+// 			res.redirect("/shops");
+// 		}
+// 	});
+// });
 
 module.exports = router;

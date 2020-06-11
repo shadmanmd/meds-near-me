@@ -7,6 +7,29 @@ var express 	= require("express"),
 	User 		= require("../models/user"),
 	Shops		= require("../models/shops");
 
+// Multer and Cloudinary requirements - https://github.com/nax3t/image_upload_example
+var multer = require('multer');
+var storage = multer.diskStorage({
+  filename: function(req, file, callback) {
+    callback(null, Date.now() + file.originalname);
+  }
+});
+var imageFilter = function (req, file, cb) {
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
+var upload = multer({ storage: storage, fileFilter: imageFilter})
+
+var cloudinary = require('cloudinary');
+cloudinary.config({ 
+  cloud_name: 'shadmanmd', 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 //root route
 router.get("/", function(req, res){
     res.redirect("/shops");
@@ -18,28 +41,78 @@ router.get("/register", function(req, res){
 });
 
 //handle sign up logic
-router.post("/register", function(req, res){
-    var newUser = new User({
-		email: req.body.email, 
-		username: req.body.username, 
-	});
-	if (req.body.adminCode === process.env.ADMINCODE){
-		newUser.isAdmin = true;
+router.post("/register", upload.single('dp'), function(req, res){
+	if(req.file){
+		cloudinary.v2.uploader.upload(req.file.path, function(err, result) {
+			if(err) {
+				req.flash('error', err.message);
+				return res.redirect('back');
+			}
+			// add cloudinary url for the image to the shop object under image property
+			req.body.dp = result.secure_url;
+			// create a new user
+			var newUser = new User({
+				email: req.body.email, 
+				username: req.body.username, 
+				dp: req.body.dp
+			});
+			if (req.body.adminCode === process.env.ADMINCODE){
+				newUser.isAdmin = true;
+			}
+			User.register(newUser, req.body.password, function(err, user){
+				if(err){
+					req.flash("error", err.message);
+					res.redirect("/register");
+				}
+				passport.authenticate("local")(req, res, function(){
+					req.flash("success", "MedsNearMe welcomes you, " + user.username + '!');
+					res.redirect("/shops"); 
+				});
+			});
+		});
 	}
-	if (req.body.dp){
-		newUser.dp = req.body.dp;
+	else{
+		var newUser = new User({
+			email: req.body.email, 
+			username: req.body.username, 
+		});
+		if (req.body.adminCode === process.env.ADMINCODE){
+			newUser.isAdmin = true;
+		}
+		User.register(newUser, req.body.password, function(err, user){
+			if(err){
+				req.flash("error", err.message);
+				res.redirect("/register");
+			}
+			passport.authenticate("local")(req, res, function(){
+				req.flash("success", "MedsNearMe welcomes you, " + user.username + '!');
+				res.redirect("/shops"); 
+			});
+		});
 	}
-    User.register(newUser, req.body.password, function(err, user){
-        if(err){
-            req.flash("error", err.message);
-            res.redirect("/register");
-        }
-        passport.authenticate("local")(req, res, function(){
-			req.flash("success", "MedsNearMe welcomes you, " + user.username + '!');
-           	res.redirect("/shops"); 
-        });
-    });
 });
+// router.post("/register", function(req, res){
+	// var newUser = new User({
+	// 	email: req.body.email, 
+	// 	username: req.body.username, 
+	// });
+	// if (req.body.adminCode === process.env.ADMINCODE){
+	// 	newUser.isAdmin = true;
+	// }
+	// if (req.body.dp){
+	// 	newUser.dp = req.body.dp;
+	// }
+	// User.register(newUser, req.body.password, function(err, user){
+	// if(err){
+	// req.flash("error", err.message);
+	// res.redirect("/register");
+	// }
+	// passport.authenticate("local")(req, res, function(){
+	// 		req.flash("success", "MedsNearMe welcomes you, " + user.username + '!');
+	// res.redirect("/shops"); 
+	// });
+	// });
+// });
 
 //show login form
 router.get("/login", function(req, res){

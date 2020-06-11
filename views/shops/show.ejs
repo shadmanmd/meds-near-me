@@ -24,7 +24,7 @@
 						<%= shop.address %>
 					</p>
 					<p>
-						<em>Submitted by: <a href="/profile/<%= shop.author.id %>"><%= shop.author.username %></a>, <%= moment(shop.createdAt).fromNow() %></em>
+						<em>Submitted by: <a href="/profile/<%= shop.author.id %>"><%= shop.author.username %></a>, Updated <%= moment(shop.createdAt).fromNow() %></em>
 					</p>
 					<% if(currentUser && shop.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
 						<a class="btn btn-xs btn-warning" href="/shops/<%= shop._id %>/edit">Edit</a>
