@@ -121,7 +121,8 @@ router.put("/:id", upload.single('shop[image]'), function(req, res){
 			shop.city = req.body.shop.city;
 			shop.opensAt = req.body.shop.opensAt;
 			shop.closesAt = req.body.shop.closesAt;
-			shop.days = req.body.shop.days;
+			if(req.body.shop.days)
+				shop.days = req.body.shop.days;
             shop.save();
             req.flash("success","Successfully Updated!");
             res.redirect("/shops/" + shop._id);

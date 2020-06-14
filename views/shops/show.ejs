@@ -17,13 +17,14 @@
 				<img class="img-fluid" src="<%= shop.image %>">
 				<div class="card-body">
 					<h4 class="float-right">
-						Call: <%= shop.contact %>
+						<i class="text-success fas fa-phone-alt"></i><a href="tel: <%= shop.contact %>"> <%= shop.contact %></a> 
 					</h4>
 					<h1 class="card-title">
 						<%= shop.name %>
 					</h1>
 					<hr>
 					<h3>
+						<i class="text-success fas fa-map-marker-alt"></i>
 						<%= shop.address %>
 						<br>
 						<em><%= shop.city %></em>
@@ -50,7 +51,9 @@
 							<% sum += comment.rating; %>
 						<% }) %>
 						<% var avg = sum/shop.comments.length; %>
-						<em>[Average Rating: <strong><%= avg %> <i class="orange fas fa-star"></i></strong>]</em>
+						<% if (avg>0) { %>
+							<em>[Average Rating: <strong><%= Math.ceil(avg) %> <i class="orange fas fa-star"></i></strong>]</em>
+						<% } %>
 					</div>
 				</div>
 			</div>
