@@ -1,33 +1,71 @@
 <%- include("../partials/header") %>
 
 <div class="container">
+	<legend>
+		<h1>Add a new Medical Shop</h1>
+	</legend>
+	<hr>
 	<div class="row">
-		<legend>
-			<h1>Add a new Medical Shop</h1>
-		</legend>
 		<div class="col-md-12">
 			<form action="/shops" method="POST" enctype="multipart/form-data">
 				<div class="form-group">
-					<label for="name">Shop's Name</label>
-					<input class="form-control" type="text" name="shop[name]" placeholder="Enter the name" required>
+					<label for="name">Shop's Name<span class="red"> *</span></label>
+					<input class="form-control" type="text" name="shop[name]" placeholder="Enter the name" required autofocus>
 				</div>
 				<div class="form-group">
-					<label for="image">Shop's Image</label>
-					<input class="form-control" type="file" name="shop[image]" accept="image/*" required>
+					<label for="image">Shop's Image<span class="red"> *</span></label>
+					<input class="form-control" type="file" name="shop[image]" accept="image/*" required autofocus>
 				</div>
 				<div class="form-group">
-					<label for="contact">Shop's Contact No.</label>
-					<input class="form-control" type="number" name="shop[contact]" placeholder="contact no." required>
+					<label for="image">Shop's City<span class="red"> *</span></label>
+					<input class="form-control" type="city" name="shop[city]" placeholder="Enter name of City/Town" required autofocus>
 				</div>
 				<div class="form-group">
-					<label for="address">Shop's Address</label>
-					<input class="form-control" type="text" name="shop[address]" placeholder="address" required>
+					<label for="contact">Shop's Contact No.<span class="red"> *</span></label>
+					<input class="form-control" type="tel" name="shop[contact]" placeholder="contact no." required autofocus>
+				</div>
+				<div class="form-group">
+					<label for="address">Shop's Complete Address<span class="red"> *</span></label>
+					<input class="form-control" type="text" name="shop[address]" placeholder="address" required autofocus>
+				</div>
+				<div class="form-group">
+					<label for="opensAt">Shop's Opening Time<span class="red"> *</span></label>
+					<input class="form-control" type="time" name="shop[opensAt]" placeholder="opensAt" required autofocus>
+				</div>
+				<div class="form-group">
+					<label for="closesAt">Shop's Closing Time<span class="red"> *</span></label>
+					<input class="form-control" type="time" name="shop[closesAt]" placeholder="closesAt" required autofocus>
+				</div>
+				<div class="form-group">
+					<label for="workingDays">Shop's Working Days<span class="red"> *</span></label>
+					<div name="workingDays">
+						<input type="radio" name="shop[days]" value="Everyday" required autofocus>
+						<label for="Everyday">Everyday</label><br>
+						<input type="radio" name="shop[days]" value="Weekdays" required autofocus>
+						<label for="Weekdays">Weekdays</label><br>
+						<input type="radio" name="shop[days]" value="Monday Closed" required autofocus>
+						<label for="Monday Closed">Monday Closed</label><br>
+						<input type="radio" name="shop[days]" value="Tuesday Closed" required autofocus>
+						<label for="Tuesday Closed">Tuesday Closed</label><br>
+						<input type="radio" name="shop[days]" value="Wednesday Closed" required autofocus>
+						<label for="Wednesday Closed">Wednesday Closed</label><br>
+						<input type="radio" name="shop[days]" value="Thursday Closed" required autofocus>
+						<label for="Thursday Closed">Thursday Closed</label><br>
+						<input type="radio" name="shop[days]" value="Friday Closed" required autofocus>
+						<label for="Friday Closed">Friday Closed</label><br>
+						<input type="radio" name="shop[days]" value="Saturday Closed" required autofocus>
+						<label for="Saturday Closed">Saturday Closed</label><br>
+						<input type="radio" name="shop[days]" value="Sunday Closed" required autofocus>
+						<label for="Sunday Closed">Sunday Closed</label><br>
+					</div>
+				</div>
+				<div class="form-group">
+					<p class="float-right text-right"><span class="red">* Required</span></p>
 				</div>
 				<div class="form-group" style="width:20%; margin:20px auto;">
-					<button class="btn btn-lg btn-default btn-block btn-primary">Submit</button>
+					<button class="btn btn-primary">Submit</button>
 				</div>
-			</form>
-			<a href="/shops">Go Back</a>	
+			</form>	
 		</div>
 	</div>
 </div>

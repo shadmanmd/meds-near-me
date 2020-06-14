@@ -1,20 +1,28 @@
 <%- include("../partials/header") %>
 
 <div class="container">
+	<legend>
+		<h1>Add a new review to <%= shop.name %></h1>
+	</legend>
+	<hr>
 	<div class="row">
-		<legend>
-			<h1>Add a new comment to <%= shop.name %></h1>
-		</legend>
 		<div class="col-md-12">
 			<form action="/shops/<%= shop.id %>/comments" method="POST">
 				<div class="form-group">
-					<input class="form-control" type="text" name="comment[text]" autofocus>
+					<label for="comment[text]">Your Comment <span class="red">*</span></label>
+					<input class="form-control" type="text" name="comment[text]" autofocus placeholder="Comment Here" required>
+				</div>
+				<div>
+					<label for="comment[rating]">Your Rating (1 to 5) <span class="red">*</span></label>
+					<input class="form-control" type="number" min="1" max="5" step="1" name="comment[rating]" autofocus required>
+				</div>
+				<div class="form-group">
+					<p class="float-right text-right"><span class="red">* Required</span></p>
 				</div>
 				<div class="form-group" style="width:20%; margin:20px auto;">
-					<button class="btn btn-lg btn-default btn-block btn-primary">Submit</button>
+					<button class="mycentre btn btn-primary">Submit</button>
 				</div>
 			</form>
-			<a href="/shops">Go Back</a>	
 		</div>
 	</div>
 </div>

@@ -27,14 +27,23 @@ cloudinary.config({
 
 //INDEX - show all shops
 router.get("/", function(req, res){
-    // Get all shops from DB
-    Shop.find({}, function(err, allShops){
-       if(err){
-           console.log(err);
-       } else {
-          res.render("shops/index",{shops:allShops});
-       }
-    });
+	if(req.query.search) {
+		Shop.find().where('city').equals(req.query.search).exec(function(err, foundShops){
+			if(err){
+				req.flash('error', err.message);
+			} else {
+				res.render("shops/index", {shops:foundShops});	
+			}
+		});
+	} else {
+		Shop.find({}, function(err, allShops){
+		   if(err){
+			   console.log(err);
+		   } else {
+			  res.render("shops/index",{shops:allShops});
+		   }
+		});
+	}
 });
 
 //CREATE - add new shop to DB
@@ -53,13 +62,13 @@ router.post("/", middleware.isLoggedIn, upload.single('shop[image]'), function(r
         id: req.user._id,
         username: req.user.username
       }
-      Shop.create(req.body.shop, function(err, shop) {
-        if (err) {
-          req.flash('error', err.message);
-          return res.redirect('back');
-        }
-        res.redirect('/shops/' + shop.id);
-      });
+	  Shop.create(req.body.shop, function(err, shop) {
+		if (err) {
+		  req.flash('error', err.message);
+		  return res.redirect('back');
+		}
+		res.redirect('/shops/' + shop.id);
+	  });
     });
 });
 
@@ -109,6 +118,10 @@ router.put("/:id", upload.single('shop[image]'), function(req, res){
             shop.name = req.body.shop.name;
             shop.address = req.body.shop.address;
 			shop.contact = req.body.shop.contact;
+			shop.city = req.body.shop.city;
+			shop.opensAt = req.body.shop.opensAt;
+			shop.closesAt = req.body.shop.closesAt;
+			shop.days = req.body.shop.days;
             shop.save();
             req.flash("success","Successfully Updated!");
             res.redirect("/shops/" + shop._id);
@@ -136,16 +149,5 @@ router.delete('/:id', function(req, res) {
     }
   });
 });
-
-// router.delete("/:id", middleware.checkShopOwnership, function(req, res){
-// 	Shop.findByIdAndRemove(req.params.id, function(err){
-// 		if(err){
-// 			res.redirect("/shops");
-// 		}
-// 		else{
-// 			res.redirect("/shops");
-// 		}
-// 	});
-// });
 
 module.exports = router;

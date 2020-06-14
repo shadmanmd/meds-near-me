@@ -4,39 +4,47 @@
 		<title>MedsNearMe</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<!-- BootStrap CDN -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 		<!-- CSS -->
 		<link rel="stylesheet" href="/stylesheets/main.css">
 	</head>
 	<script>
+		
 		function secret() {
-			window.alert("Secret Code is meant to make a user an admin. To know the secret code, contact developer.");
+			window.alert("Admin Code is meant to make a user an admin.\nAn admin can edit and delete shops and comments of any user on the website.\n\nTo know the admin code, contact developer.\nCheck footer!");
+		}
+		
+		function googlemaps() {
+			window.alert("Message from Md Shadman:\n\nI wanted to add Google Maps too but the Google Maps API asks for credit card information :/\nI don't consider it safe, so I just can't embed Google Maps to my website.\n\nHowever you can use your own Google Maps and search the shop's address, until I come up with a solution for this!")
 		}
 	</script>
 	<!-- FontAwesome CDN -->
 	<script src="https://kit.fontawesome.com/d3ba8b71b7.js" crossorigin="anonymous"></script> 
 	<body>
-		<!-- navbar-expand-md -->
-		<nav class="navbar navbar-default">
+	
+		<nav class="navbar navbar-dark mynav sticky-top navbar-expand-lg">
 			<div class="container-fluid">
 				<div class="navbar-header">
-					<a class="navbar-brand" href="/">MedsNearMe</a>
+					<a class="navbar-brand" href="/"><i class="fas fa-pills"></i> MedsNearMe</a>
 				</div>
-				<!-- <div class="collapse navbar-collapse"> -->
-				<div>
-					<ul class="nav navbar-nav navbar-right">
+				<a href="/about" class="ml-auto mr-1"><i class="fas fa-info-circle"></i></a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				 <div class="collapse navbar-collapse flex-grow-0" id="navbarSupportedContent">
+        			<ul class="navbar-nav nav text-right">
 						<% if(!currentUser){ %>
-							<li><a href="/login">Login</a></li>
-							<li><a href="/register">Sign Up</a></li>
+						<li class="nav-item"><a class="nav-link ml-auto mr-1" href="/login">Login</a></li>
+						<li class="nav-item"><a class="nav-link ml-auto mr-1" href="/register">Sign Up</a></li>
 						<% } else { %>
-							<li><a href="/profile/<%= currentUser._id %>">Welcome <%= currentUser.username %>!</a></li>
-							<li><a href="/logout">Logout</a></li>
+						<li class="nav-item"><a class="nav-link active ml-auto mr-1" href="/profile/<%= currentUser._id %>">Welcome <%= currentUser.username %>!</a></li>
+						<li class="nav-item"><a class="nav-link ml-auto mr-1" href="/logout">Logout</a></li>
 						<% } %>
-					</ul>
+					 </ul>
 				</div>
 			</div>
 		</nav>
-		
+		<div class="gap"></div>
 		<div class="container">
 			<% if(error && error.length>0){ %>
 				<div class="alert alert-danger" role="alert">

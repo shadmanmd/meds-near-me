@@ -4,8 +4,12 @@ var shopsSchema = new mongoose.Schema({
 	name: String,
 	image: String,
 	imageId: String,
+	city: String,
+	contact: String,
+	opensAt: String,
+	closesAt: String,
+	days: String,
 	address: String,
-	contact: Number,
 	author: {
 		id: {
 			type: mongoose.Schema.Types.ObjectId,

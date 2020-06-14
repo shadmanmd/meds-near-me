@@ -35,6 +35,10 @@ router.get("/", function(req, res){
     res.redirect("/shops");
 });
 
+router.get("/about", function(req, res){
+	res.render("about");
+});
+
 // show register form
 router.get("/register", function(req, res){
    res.render("register"); 

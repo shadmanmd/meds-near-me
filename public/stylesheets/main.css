@@ -10,6 +10,40 @@
 	display: inline;
 }
 
-.disclaimer {
-	margin-bottom: 0;
+.mynav {
+	background-color: black;
+	color: white;
+}
+
+nav a{
+	color: white;
+	text-decoration: none;
+}
+
+.gap{
+	height: 15px;
+	width:100%;
+}
+
+.myfooter {
+	background-color: black;
+	color: white;
+}
+
+.red {
+	color: red;
+}
+
+.blue {
+	color: blue;
+}
+
+.orange {
+	color: orange;
+}
+
+.mycentre {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
